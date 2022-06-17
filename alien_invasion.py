@@ -1,11 +1,13 @@
 import sys
 
 import pygame
+from random import randint
 
 from settings import *
 from ship import Ship
 from bullet import *
 from alien import Alien 
+from star import *
 
 class AlienInvasion:
 	"""Overall class to manage assets and behavior"""
@@ -28,6 +30,8 @@ class AlienInvasion:
 
 		# Sets the background color!
 		#self.bg_color = (22,23,59)  ~~~ No longer needed with Settings class
+		self.stars = pygame.sprite.Group()
+		self._start_stars()
 
 		self.ship = Ship(self)
 		self.bullets = pygame.sprite.Group()
@@ -76,6 +80,8 @@ class AlienInvasion:
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+###########  ALIEN  #############################################
+
 	def _create_fleet(self):
 		"""Create a fleet of aliens"""
 		alien = Alien(self)
@@ -106,6 +112,33 @@ class AlienInvasion:
 		alien.rect.y = alien_height + 2 * alien.rect.height * row_number 
 		self.aliens.add(alien)
 
+##############  STARS  ###########################################
+
+	def _start_stars(self):
+		"""Create a sky of stars"""
+		
+		available_space_x = self.settings.screen_width
+		number_cols = available_space_x // (self.settings.star_cell_width) + 2
+
+		available_space_y = self.settings.screen_height
+		number_rows = available_space_y // (self.settings.star_cell_height) + 2
+
+		# Create sir fleetwood of mac starry edition
+		for row_num in range(number_rows):
+			for col_num in range(number_cols):
+				self._create_star(col_num,row_num)
+
+	def _create_star(self,col_number,row_number):
+		"""Create a star and place it in a row"""
+		star = Star(self)
+		star.x = randint(1,star.cell_width) + star.cell_width * (col_number-1)
+		star.rect.x = star.x
+		star.y = randint(1,star.cell_height) + star.cell_height * (row_number - 1)
+		star.rect.y = star.y 
+		self.stars.add(star)
+
+############  BULLETS  ##############################################
+
 	def _fire_bullet(self):
 		"""Create new bullet and add it to bullet group"""
 		if len(self.bullets) < self.settings.bullets_allowed:
@@ -120,10 +153,14 @@ class AlienInvasion:
 			if bullet.rect.bottom <= 0:
 				self.bullets.remove(bullet)
 
+######  SCREEN REFRESH  ###########################################
+
 	def _update_screen(self):
 		"""Update images on the screen, and flip to the new screen"""
 		self.screen.fill(self.settings.bg_color)
 		#self.ship.blitme()
+		for star in self.stars.sprites():
+			star.draw_star()
 		for bullet in self.bullets.sprites():
 			bullet.draw_bullet()
 		self.ship.blitme()

@@ -26,3 +26,7 @@ class Settings:
 		arbitrary number) when they reach the bottom of the screen"""
 		self.star_speed = 1.75
 		
+		self.star_color = (250,252,204)
+		self.star_cell_width = 200
+		self.star_cell_height = 200
+		
