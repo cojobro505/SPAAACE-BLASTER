@@ -13,6 +13,7 @@ class Ship:
 		self.image = pygame.image.load('images/spaceship.png')
 		self.rect = self.image.get_rect()
 
+
 		# Start each new ship at the bottom center of the screen.
 		self.rect.midbottom = self.screen_rect.midbottom
 		self.rect.y -= 5
