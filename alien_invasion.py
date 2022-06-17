@@ -47,6 +47,7 @@ class AlienInvasion:
 			self.ship.update()
 			self._update_bullets()
 			self._update_screen()
+			self._update_stars()
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -116,13 +117,14 @@ class AlienInvasion:
 
 	def _start_stars(self):
 		"""Create a sky of stars"""
-		
+		self.star_dist = 0
 		available_space_x = self.settings.screen_width
 		number_cols = available_space_x // (self.settings.star_cell_width) + 2
+		self.number_cols = number_cols
 
 		available_space_y = self.settings.screen_height
 		number_rows = available_space_y // (self.settings.star_cell_height) + 2
-
+		
 		# Create sir fleetwood of mac starry edition
 		for row_num in range(number_rows):
 			for col_num in range(number_cols):
@@ -136,6 +138,21 @@ class AlienInvasion:
 		star.y = randint(1,star.cell_height) + star.cell_height * (row_number - 1)
 		star.rect.y = star.y 
 		self.stars.add(star)
+
+	def _update_stars(self):
+		"""update position of old stars, get rid of old stars 
+		   and replace new stars"""
+		self.stars.update()
+		self.star_dist += self.settings.star_speed
+		# Adds new stars
+		if self.star_dist >= self.settings.star_cell_height:
+			self.star_dist -= self.settings.star_cell_height
+			for col_num in range(self.number_cols):
+				self._create_star(col_num,0)
+		# Get rid of old stars
+		for star in self.stars.copy():
+			if star.rect.top >= self.settings.screen_height:
+				self.stars.remove(star)
 
 ############  BULLETS  ##############################################
 

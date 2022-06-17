@@ -24,7 +24,7 @@ class Settings:
 		Then stars should move downwards and increment to the right at
 		the top of the screen by their cell width plus 2.5 (or some other
 		arbitrary number) when they reach the bottom of the screen"""
-		self.star_speed = 1.75
+		self.star_speed = 1
 		
 		self.star_color = (250,252,204)
 		self.star_cell_width = 200
