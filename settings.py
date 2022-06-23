@@ -10,6 +10,7 @@ class Settings:
 
 		# Ship settings
 		self.ship_speed = 3.5
+		self.ship_limit = 3
 
 		# Bullet settings
 		self.bullet_speed = 3
@@ -17,6 +18,12 @@ class Settings:
 		self.bullet_height = 30
 		self.bullet_color = (255,93,204)
 		self.bullets_allowed = 100 # I dislike so i made redundant >;)
+
+		# Alien Settings
+		self.alien_speed = 1.75
+		self.fleet_drop_speed = 15
+		# fleet direction of 1 represents right; -1 represents left
+		self.fleet_direction = 1
 
 		# Star settings
 		"""Stars should be randomly placed (x,y) coords in certain 
@@ -26,7 +33,7 @@ class Settings:
 		arbitrary number) when they reach the bottom of the screen"""
 		self.star_speed = 1
 		
-		self.star_color = (250,252,204)
+		self.star_color = (180,180,140)
 		self.star_cell_width = 200
 		self.star_cell_height = 200
 		

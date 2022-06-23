@@ -1,4 +1,5 @@
 import sys
+from time import sleep
 
 import pygame
 from random import randint
@@ -8,6 +9,7 @@ from ship import Ship
 from bullet import *
 from alien import Alien 
 from star import *
+from game_stats import GameStats
 
 class AlienInvasion:
 	"""Overall class to manage assets and behavior"""
@@ -42,10 +44,13 @@ class AlienInvasion:
 
 	def run_game(self):
 		"""Start the main loop for the game"""
+		clock=pygame.time.Clock()
 		while True:
+			clock.tick(240) # refresh rate
 			self._check_events()
 			self.ship.update()
 			self._update_bullets()
+			self._update_aliens()
 			self._update_screen()
 			self._update_stars()
 
@@ -113,6 +118,28 @@ class AlienInvasion:
 		alien.rect.y = alien_height + 2 * alien.rect.height * row_number 
 		self.aliens.add(alien)
 
+	def _update_aliens(self):
+		"""update position of all the aliens in the fleet"""
+		self._check_fleet_edges()
+		self.aliens.update()
+
+		#look for alien-ship collisions
+		if pygame.sprite.spritecollideany(self.ship,self.aliens):
+			print("ship hit!")
+
+	def _check_fleet_edges(self):
+		"""Respond appropriately if any aliens have reached the edge"""
+		for alien in self.aliens.sprites():
+			if alien.check_edges():
+				self._change_fleet_direction()
+				break
+
+	def _change_fleet_direction(self):
+		"""Drop entire fleet and change fleets direction"""
+		for alien in self.aliens.sprites():
+			alien.rect.y += self.settings.fleet_drop_speed
+		self.settings.fleet_direction *= -1
+
 ##############  STARS  ###########################################
 
 	def _start_stars(self):
@@ -169,6 +196,19 @@ class AlienInvasion:
 		for bullet in self.bullets.copy(): # python dosent allow modification of list while loop runs
 			if bullet.rect.bottom <= 0:
 				self.bullets.remove(bullet)
+
+		self._check_bullet_alien_collisions()
+
+	def _check_bullet_alien_collisions(self):
+		"""Respond to bullets-alien collisions"""
+		# Remove the bullets and aliens that have collided
+		collisions = pygame.sprite.groupcollide(
+			self.bullets,self.aliens,True,True)
+		if not self.aliens:
+			# Destroy existing bullets and create a new fleet
+			self.bullets.empty()
+			self._create_fleet()
+
 
 ######  SCREEN REFRESH  ###########################################
 
