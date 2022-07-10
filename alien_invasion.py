@@ -87,16 +87,7 @@ class AlienInvasion:
 			self._fire_bullet()
 		elif event.key == pygame.K_RETURN: 
 			if not self.stats.game_active:
-				self.stats.reset_stats()
-				self.stats.game_active = True
-
-				# Get rid of remaining aliens and bullets
-				self.aliens.empty()
-				self.bullets.empty()
-
-				# Create new fleet and recenter ship
-				self._create_fleet()
-				self.ship.center_ship()
+				self._start_game()
 
 	def _check_keyup_events(self,event):
 		"""Respond to key releases"""
@@ -107,16 +98,22 @@ class AlienInvasion:
 
 	def _check_play_button(self,mouse_pos):
 		"""Start a new game when a player clicks the play button"""
-		if self.play_button.rect.collidepoint(mouse_pos):
-			self.stats.reset_stats()
-			self.stats.game_active = True
-			# Get rid of remaining aliens and bullets
-			self.aliens.empty()
-			self.bullets.empty()
+		button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+		if button_clicked and not self.stats.game_active:
+			self._start_game()
 
-			# Create new fleet and recenter ship
-			self._create_fleet()
-			self.ship.center_ship()
+	def _start_game(self):
+		self.stats.reset_stats()
+		self.settings.initialize_dynamic_settings()
+		self.stats.game_active = True
+		# Get rid of remaining aliens and bullets
+		self.aliens.empty()
+		self.bullets.empty()
+		# Create new fleet and recenter ship
+		self._create_fleet()
+		self.ship.center_ship()
+		# Hide the mouse cursor
+		pygame.mouse.set_visible(False)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -200,6 +197,7 @@ class AlienInvasion:
 			self._update_screen()
 			self._create_fleet()
 			self.stats.game_active = False
+			pygame.mouse.set_visible(True)
 
 	def _check_aliens_bottom(self):
 		"""Check to see if any aliens have reached the bottom of the screen"""
@@ -210,7 +208,6 @@ class AlienInvasion:
 				self._ship_hit()
 				break
 	
-
 ##############  STARS  ###########################################
 
 	def _start_stars(self):
@@ -279,6 +276,7 @@ class AlienInvasion:
 			# Destroy existing bullets and create a new fleet
 			self.bullets.empty()
 			self._create_fleet()
+			self.settings.increase_speed()
 
 ######  SCREEN REFRESH  ###########################################
 
