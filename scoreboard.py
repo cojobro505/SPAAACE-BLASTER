@@ -19,7 +19,7 @@ class Scoreboard:
 
 	def prep_score(self):
 		"""Render score onto screen"""
-		score_str = str(self.stats.score)
+		score_str = str(int(self.stats.score))
 		self.score_image = self.font.render(score_str, True,
 			self.text_color,self.settings.bg_color)
 		self.score_image.set_colorkey(self.settings.bg_color)
