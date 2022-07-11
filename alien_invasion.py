@@ -11,6 +11,7 @@ from alien import Alien
 from star import *
 from game_stats import GameStats
 from button import *
+from scoreboard import Scoreboard
 
 class AlienInvasion:
 	"""Overall class to manage assets and behavior"""
@@ -31,7 +32,9 @@ class AlienInvasion:
 
 		pygame.display.set_caption("Alien Invasion")
 
+		# Create an instance of gamestats, and a scoreboard as well
 		self.stats = GameStats(self)
+		self.sb = Scoreboard(self)
 
 		# Sets the background color!
 		#self.bg_color = (22,23,59)  ~~~ No longer needed with Settings class
@@ -290,6 +293,8 @@ class AlienInvasion:
 			bullet.draw_bullet()
 		self.ship.blitme()
 		self.aliens.draw(self.screen)
+		self.sb.show_score()
+
 		if not self.stats.game_active:
 			self.play_button.draw_button()
 		# Make most recently drawn screen visible

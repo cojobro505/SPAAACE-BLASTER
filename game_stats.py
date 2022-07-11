@@ -13,3 +13,5 @@ class GameStats:
 		"""Initialize stats that change throughout the game"""
 		self.ships_left = self.settings.ship_limit
 		self.score = 0
+
+	
