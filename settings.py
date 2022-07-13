@@ -9,7 +9,7 @@ class Settings:
 		self.bg_color = (10,10,20)
 
 		# Ship settings
-		self.ship_limit = 2
+		self.ship_limit = 3
 
 		# Bullet settings
 		self.bullet_width = 6
@@ -32,6 +32,8 @@ class Settings:
 
 		# How quickly the game speeds up
 		self.speedup_scale = 1.1
+		# How quickly the aliens point value increases
+		self.score_scale = 1.5
 
 		# Scoring
 		self.alien_points = 50
@@ -53,4 +55,4 @@ class Settings:
 		self.ship_speed *= self.speedup_scale
 		self.bullet_speed *= self.speedup_scale
 		self.alien_speed *= self.speedup_scale
-		self.alien_points *= (self.speedup_scale)*2
+		self.alien_points *= self.score_scale
