@@ -1,5 +1,7 @@
 import pygame.font
 
+from install_compatibility import *
+
 class Button:
 
 	def __init__(self,aigame,msg):
@@ -7,7 +9,7 @@ class Button:
 		self.screen = aigame.screen
 		self.screen_rect = self.screen.get_rect()
 
-		self.image = pygame.image.load('images/start button.png')
+		self.image = pygame.image.load(resource_path('images/start button.png'))
 		self.rect = self.image.get_rect()
 
 		# center it.

@@ -2,6 +2,8 @@
 import pygame
 from pygame.sprite import Sprite
 
+from install_compatibility import *
+
 class Lifeboat(Sprite):
 	"""A class to manage the ship life counter"""
 
@@ -13,5 +15,5 @@ class Lifeboat(Sprite):
 		self.screen_rect = ai_game.screen.get_rect()
 
 		# Load the ship image and get its rect.
-		self.image = pygame.image.load('images/lifeboat.png')
+		self.image = pygame.image.load(resource_path('images/lifeboat.png'))
 		self.rect = self.image.get_rect()

@@ -2,6 +2,7 @@ import pygame.font
 from pygame.sprite import Group
 
 from lifecounter import Lifeboat
+from install_compatibility import *
 
 class Scoreboard:
 	"""A class to report scoring information"""
@@ -19,12 +20,14 @@ class Scoreboard:
 		self.text_color = (235, 223, 12)
 		self.font = pygame.font.SysFont('lucidaconsole',48)
 		self.level_font = pygame.font.SysFont('lucidaconsole',32)
+		self.message_font = pygame.font.SysFont('lucidaconsole',16)
 
 		# Prepare the initial score image
 		self.prep_score()
 		self.prep_highscore()
 		self.prep_level()
 		self.prep_ships()
+		self.prep_message()
 
 	def prep_score(self):
 		"""Render score onto screen"""
@@ -63,6 +66,18 @@ class Scoreboard:
 		self.level_rect.right = self.score_rect.right
 		self.level_rect.top = self.score_rect.bottom +10
 
+	def prep_message(self):
+		"""Tell the player how to quit the game"""
+		message = "(<-) or (->) to move     (^) or (SPACE) to fire     Press (esc) to quit"
+		self.mes_image = self.message_font.render(message, True,
+				self.text_color,self.settings.bg_color)
+		self.mes_image.set_colorkey(self.settings.bg_color)
+
+		# Postition level below the score
+		self.mes_rect = self.mes_image.get_rect()
+		self.mes_rect.right = self.score_rect.right
+		self.mes_rect.bottom = self.screen_rect.bottom - 5
+
 	def prep_ships(self):
 		"""Show how many ships are left"""
 		self.ships = Group()
@@ -77,12 +92,13 @@ class Scoreboard:
 		self.screen.blit(self.score_image,self.score_rect)
 		self.screen.blit(self.highscore_image,self.highscore_rect)
 		self.screen.blit(self.level_image,self.level_rect)
+		self.screen.blit(self.mes_image,self.mes_rect)
 		self.ships.draw(self.screen)
 
 	def check_highscore(self):
 		"""Check to see if there is a new highscore and then update it"""
 		if self.stats.score > self.stats.highscore:
-			with open("highscore.txt",'w') as f:
+			with open(resource_path("highscore.txt"),'w') as f:
 				f.write(str(self.stats.score))
 			self.stats.highscore = self.stats.score
 			self.prep_highscore()

@@ -1,3 +1,5 @@
+from install_compatibility import *
+
 class GameStats:
 	"""Track game statistics for Alien Invasion"""
 
@@ -5,7 +7,7 @@ class GameStats:
 		"""Initialize statistics"""
 		self.settings = ai_game.settings
 		self.reset_stats()
-		with open('highscore.txt','r+') as f:
+		with open(resource_path('highscore.txt'),'r+') as f:
 			contents = f.read()
 			if not contents:
 				f.write('0')
